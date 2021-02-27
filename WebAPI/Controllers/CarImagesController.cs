@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
                 if (files.Length > 0)
                 {
                     carImage.ImagePath = FileHelper.Add(files, "Resimler");
-                    var result = _carImageService.Add(files, carImage);
+                    var result = _carImageService.Add(carImage);
                     return Ok(result);
                 }
                 else

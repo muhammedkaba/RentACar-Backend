@@ -25,7 +25,7 @@ namespace Business.Concrete
         }
 
         [ValidationAspect(typeof(CarImageValidator))]
-        public IResult Add(IFormFile file, CarImage carImage)
+        public IResult Add(CarImage carImage)
         {
             IResult result = BusinessRules.Run(
                 CheckIfHasMoreThanFiveImages(carImage.CarId)
