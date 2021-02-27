@@ -1,4 +1,5 @@
-﻿using Core.Utilities.Results;
+﻿using Core.Entities;
+using Core.Utilities.Results;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -8,57 +9,48 @@ using System.Threading.Tasks;
 
 namespace Core.Utilities.FileHelper
 {
-    public class FileHelper
+    public static class FileHelper
     {
-        public static string AddAsync(IFormFile file)
+        public static string Add(IFormFile file, string str)
         {
+            string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + $"\\{str}\\");
 
-            var sourcepath = Path.GetTempFileName();
-            if (file.Length > 0)
-                using (var stream = new FileStream(sourcepath, FileMode.Create))
-                    file.CopyTo(stream);
-
-
-            var result = newPath(file);
-
-            File.Move(sourcepath, result);
-
-            return result;
-        }
-
-        public static string UpdateAsync(string sourcePath, IFormFile file)
-        {
-            var result = newPath(file);
-
-            if (sourcePath.Length > 0)
+            if (!Directory.Exists(path))
             {
-                using (var stream = new FileStream(result, FileMode.Create))
+                Directory.CreateDirectory(path);
+            }
+            FileInfo fileInfo = new FileInfo(file.FileName);
+            using (FileStream fileStream = File.Create(path + Guid.NewGuid().ToString() + fileInfo.Extension))
+            {
+                file.CopyTo(fileStream);
+                return fileStream.Name;
+            }
+        }
+        public static void Update(IFormFile file, string path)
+        {
+            try
+            {
+                File.Delete(path);
+                using (FileStream fileStream = File.Create(path))
                 {
-                    file.CopyTo(stream);
+                    file.CopyTo(fileStream);
                 }
             }
-
-            File.Delete(sourcePath);
-
-            return result;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
-        public static string newPath(IFormFile file)
+        public static void Delete(string path)
         {
-            System.IO.FileInfo ff = new System.IO.FileInfo(file.FileName);
-            string fileExtension = ff.Extension;
-
-            var creatingUniqueFilename = Guid.NewGuid().ToString("N")
-               + "_" + DateTime.Now.Month + "_"
-               + DateTime.Now.Day + "_"
-               + DateTime.Now.Year + fileExtension;
-
-            string path = Path.Combine(Directory.GetParent(System.IO.Directory.GetCurrentDirectory()).FullName + @"\Images");
-
-            string result = $@"{path}\{creatingUniqueFilename}";
-
-            return result;
+            try
+            {
+                File.Delete(path);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
-
     }
 }

@@ -27,7 +27,7 @@ namespace DataAccess.Concrete.EntityFramework
                                  CarId = c.Id,
                                  CarName = c.Description,
                                  BrandName = b.BrandName,
-                                 ColorName = co.ColorName
+                                 ColorName = co.ColorName,
                              };
                 return result.ToList();
             }
