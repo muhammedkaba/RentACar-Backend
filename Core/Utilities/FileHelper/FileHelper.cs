@@ -11,9 +11,9 @@ namespace Core.Utilities.FileHelper
 {
     public static class FileHelper
     {
-        public static string Add(IFormFile file, string str)
+        public static string Add(IFormFile file, string str, string path)
         {
-            string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + $"\\{str}\\");
+            //string path = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).FullName + $"\\{str}\\");
 
             if (!Directory.Exists(path))
             {
