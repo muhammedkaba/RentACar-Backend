@@ -65,7 +65,7 @@ namespace Business.Concrete
         private IResult CheckIfDateIsAvailable(Rental rental)
         {
             var result = GetLastRentalOfCar(rental.CarId);
-            if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) > 0 && DateTime.Compare(rental.RentDate, rental.ReturnDate) < 0)
+            if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) < 0 && DateTime.Compare(rental.RentDate, rental.ReturnDate) > 0)
             {
                 return new ErrorResult("Bu tarihler arasında kiralama işlemi yapamazsınız");
             }
