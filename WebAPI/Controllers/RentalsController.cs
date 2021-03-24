@@ -15,10 +15,12 @@ namespace WebAPI.Controllers
     public class RentalsController : ControllerBase
     {
         IRentalService _rentalService;
+        ICreditCardService _creditCardService;
 
-        public RentalsController(IRentalService rentalService)
+        public RentalsController(IRentalService rentalService, ICreditCardService creditCardService)
         {
             _rentalService = rentalService;
+            _creditCardService = creditCardService;
         }
 
         [HttpGet("getall")]
@@ -48,6 +50,7 @@ namespace WebAPI.Controllers
         public IActionResult Add(Rental rental)
         {
             var result = _rentalService.Add(rental);
+
             if (result.Success)
             {
                 return Ok(result);

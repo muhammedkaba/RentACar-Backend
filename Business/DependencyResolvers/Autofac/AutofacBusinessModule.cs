@@ -39,6 +39,9 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CarUserManager>().As<ICarUserService>().SingleInstance();
             builder.RegisterType<EfCarUserDal>().As<ICarUserDal>().SingleInstance();
 
+            builder.RegisterType<CreditCardManager>().As<ICreditCardService>().SingleInstance();
+            builder.RegisterType<EfCreditCardDal>().As<ICreditCardDal>().SingleInstance();
+
             builder.RegisterType<UserManager>().As<IUserService>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
 

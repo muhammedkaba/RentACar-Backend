@@ -28,11 +28,11 @@ namespace Business.Concrete
             {
                 if (result != null)
                 {
-                    _rentalDal.Add(rental);
-                    return new SuccessResult();
+                    return result;
                 }
+                _rentalDal.Add(rental);
+                return new SuccessResult();
             }
-            return new ErrorResult("Bu tarihler arasında kiralama işlemi yapamazsınız!");
         }
 
         public IResult Delete(Rental rental)
@@ -65,7 +65,11 @@ namespace Business.Concrete
         private IResult CheckIfDateIsAvailable(Rental rental)
         {
             var result = GetLastRentalOfCar(rental.CarId);
-            if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) < 0 && DateTime.Compare(rental.RentDate, rental.ReturnDate) > 0)
+            if (result.Data == null)
+            {
+                return new SuccessResult();
+            }
+            else if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) <= 0 || DateTime.Compare(rental.RentDate, rental.ReturnDate) >= 0)
             {
                 return new ErrorResult("Bu tarihler arasında kiralama işlemi yapamazsınız");
             }
