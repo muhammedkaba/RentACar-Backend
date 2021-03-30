@@ -1,5 +1,4 @@
 ﻿using Business.Abstract;
-using Business.Concrete;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,19 +10,19 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomersController : ControllerBase
+    public class UsersController : ControllerBase
     {
-        ICustomerService _customerService;
 
-        public CustomersController(ICustomerService customerService)
+        IUserService _userService;
+
+        public UsersController(IUserService userService)
         {
-            _customerService = customerService;
+            _userService = userService;
         }
-
-        [HttpGet("getall")]
-        public IActionResult GetAll()
+        [HttpGet("getuserbyemail")]
+        public IActionResult GetAll(string email)
         {
-            var result = _customerService.GetAll();
+            var result = _userService.GetByMail(email);
             if (result.Success)
             {
                 return Ok(result);

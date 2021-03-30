@@ -17,6 +17,11 @@ namespace Business.Concrete
             _customerDal = customerDal;
         }
 
+        public IDataResult<Customer> GetById(int id)
+        {
+            return new SuccessDataResult<Customer>(_customerDal.Get(c=>c.Id == id));
+        }
+
         public IDataResult<List<Customer>> GetAll()
         {
             return new SuccessDataResult<List<Customer>>(_customerDal.GetAll());

@@ -14,16 +14,21 @@ namespace Business.Concrete
     public class RentalManager : IRentalService
     {
         IRentalDal _rentalDal;
+        ICarService _carService;
+        ICustomerService _customerService;
 
-        public RentalManager(IRentalDal rentalDal, ICarService carService)
+        public RentalManager(IRentalDal rentalDal, ICarService carService, ICustomerService customerService)
         {
             _rentalDal = rentalDal;
+            _carService = carService;
+            _customerService = customerService;
         }
 
         public IResult Add(Rental rental)
         {
             IResult result = BusinessRules.Run(
-                CheckIfDateIsAvailable(rental)
+                CheckIfDateIsAvailable(rental),
+                CheckIfCustomerFindeksIsEnough(rental)
                 );
             {
                 if (result != null)
@@ -69,9 +74,20 @@ namespace Business.Concrete
             {
                 return new SuccessResult();
             }
-            else if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) <= 0 || DateTime.Compare(rental.RentDate, rental.ReturnDate) >= 0)
+            else if (DateTime.Compare(rental.RentDate,result.Data.ReturnDate) < 0 || DateTime.Compare(rental.RentDate, rental.ReturnDate) >= 0)
             {
                 return new ErrorResult("Bu tarihler arasında kiralama işlemi yapamazsınız");
+            }
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfCustomerFindeksIsEnough(Rental rental)
+        {
+            var car = _carService.GetCarById(rental.CarId);
+            var customer = _customerService.GetById(rental.CustomerId);
+            if (customer.Data.Findeks < car.Data[0].MinFindeks)
+            {
+                return new ErrorResult("Findeks puanınız yeterli değil.");
             }
             return new SuccessResult();
         }
