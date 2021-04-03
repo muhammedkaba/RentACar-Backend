@@ -10,5 +10,7 @@ namespace Business.Abstract
     {
         IResult Check(string cardNo);
         IResult Add(CreditCard creditCard);
+        IDataResult<List<CreditCard>> GetByCustomerId(int customerId);
+        IDataResult<CreditCard> GetById(int id);
     }
 }

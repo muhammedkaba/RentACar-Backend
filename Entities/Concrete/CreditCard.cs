@@ -12,5 +12,6 @@ namespace Entities.Concrete
         public string Name { get; set; }
         public string ExpiringDate { get; set; }
         public string CVV { get; set; }
+        public int CustomerId { get; set; }
     }
 }

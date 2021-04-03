@@ -35,7 +35,7 @@ namespace Business.Concrete
             return new SuccessDataResult<User>(_userDal.Get(u => u.Email == email));
         }
 
-        public IResult Update(UserForRegisterDto user)
+        public IResult Update(UserForUpdateDto user)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(user.Password , out passwordHash, out passwordSalt);
@@ -48,7 +48,7 @@ namespace Business.Concrete
                 PasswordSalt = passwordSalt,
                 Status = true
             };
-            userToUpdate.Id = GetIdByEmail(user.Email).Data.Id;
+            userToUpdate.Id = GetIdByEmail(user.OldEmail).Data.Id;
             _userDal.Update(userToUpdate);
             return new SuccessResult();
         }

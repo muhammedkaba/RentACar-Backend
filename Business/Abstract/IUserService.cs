@@ -12,7 +12,7 @@ namespace Business.Abstract
         IDataResult<List<OperationClaim>> GetClaims(User user);
         IDataResult<User> GetIdByEmail(string email);
         IResult Add(User user);
-        IResult Update(UserForRegisterDto user);
+        IResult Update(UserForUpdateDto user);
         IDataResult<User> GetByMail(string email);
     }
 }
