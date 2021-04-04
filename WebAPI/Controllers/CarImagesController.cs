@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
             }
             catch (Exception)
             {
-                return BadRequest("yArrraaa");
+                return BadRequest("");
             }
         }
         [HttpPost("updateimage")]
