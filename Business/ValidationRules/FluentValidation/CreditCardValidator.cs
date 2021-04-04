@@ -1,4 +1,4 @@
-﻿using Entities.Concrete;
+using Entities.Concrete;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(c => c.CustomerId).NotEmpty();
             RuleFor(c => c.CVV).NotEmpty();
             RuleFor(c => c.Name).NotEmpty();
-            RuleFor(c => c.Id).NotEmpty();
             RuleFor(c => c.ExpiringDate).NotEmpty();
         }
     }
