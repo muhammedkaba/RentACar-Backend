@@ -1,4 +1,4 @@
-﻿using Business.Abstract;
+using Business.Abstract;
 using Business.BusinessAspects.Autofac;
 using Business.Constants;
 using Business.ValidationRules.FluentValidation;
@@ -16,9 +16,11 @@ namespace Business.Concrete
     public class CarManager : ICarService
     {
         ICarDal _carDal;
-        public CarManager(ICarDal carDal)
+        ICarImageService _carImageService;
+        public CarManager(ICarDal carDal, ICarImageService carImageService)
         {
             _carDal = carDal;
+            _carImageService = carImageService;
         }
 
         [ValidationAspect(typeof(CarValidator))]
@@ -48,27 +50,37 @@ namespace Business.Concrete
 
         public IDataResult<List<CarDetailDto>> GetCarDetailById(int id)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.Id == id), Messages.CarListed);
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.Id == id), Messages.CarListed);
+            result.Data[0].ImagePath = _carImageService.GetFirstImageOfCar(id).Data.ImagePath;
+            return result;
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarListed);
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.CarListed);
+            GetFirstImageOfCar(result);
+            return result;
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByBrand(int brandId)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId), Messages.CarListed);
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId), Messages.CarListed);
+            GetFirstImageOfCar(result);
+            return result;
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByBrandAndColor(int brandId, int colorId)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId && c.ColorId == colorId), Messages.CarListed);
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.BrandId == brandId && c.ColorId == colorId), Messages.CarListed);
+            GetFirstImageOfCar(result);
+            return result;
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetailsByColor(int colorId)
         {
-            return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId), Messages.CarListed);
+            var result = new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(c => c.ColorId == colorId), Messages.CarListed);
+            GetFirstImageOfCar(result);
+            return result;
         }
 
         public IDataResult<List<Car>> GetCarsByBrandId(int id)
@@ -85,6 +97,14 @@ namespace Business.Concrete
         {
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
+        }
+
+        private void GetFirstImageOfCar(IDataResult<List<CarDetailDto>> result )
+        {
+            for (int i = 0; i < result.Data.Count; i++)
+            {
+                result.Data[i].ImagePath = _carImageService.GetFirstImageOfCar(result.Data[i].CarId).Data.ImagePath;
+            }
         }
     }
 }

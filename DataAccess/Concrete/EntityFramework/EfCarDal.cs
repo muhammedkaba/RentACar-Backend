@@ -1,4 +1,4 @@
-﻿using Entities.Concrete;
+using Entities.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -11,27 +11,28 @@ using DataAccess.Abstract;
 
 namespace DataAccess.Concrete.EntityFramework
 {
-    public class EfCarDal : EfEntityRepositoryBase<Car, ReCapContext>, ICarDal
+  public class EfCarDal : EfEntityRepositoryBase<Car, ReCapContext>, ICarDal
+  {
+    public List<CarDetailDto> GetCarDetails(Expression<Func<Car, bool>> filter = null)
     {
-        public List<CarDetailDto> GetCarDetails(Expression<Func<Car, bool>> filter = null)
-        {
-            using (ReCapContext context = new ReCapContext())
-            {
-                var result = from c in filter == null ? context.Cars : context.Cars.Where(filter)
-                             join b in context.Brands on c.BrandId equals b.BrandId
-                             join co in context.Colors on c.ColorId equals co.ColorId
-                             select new CarDetailDto
-                             {
-                                 CarId = c.Id,
-                                 ModelYear = c.ModelYear,
-                                 DailyPrice = c.DailyPrice,
-                                 CarName = c.Description,
-                                 BrandName = b.BrandName,
-                                 ColorName = co.ColorName,
-                                 MinFindeks = c.MinFindeks
-                             };
-                return result.ToList();
-            }
-        }
+      using (ReCapContext context = new ReCapContext())
+      {
+        var result = from c in filter == null ? context.Cars : context.Cars.Where(filter)
+                     join b in context.Brands on c.BrandId equals b.BrandId
+                     join co in context.Colors on c.ColorId equals co.ColorId
+                     select new CarDetailDto
+                     {
+                       CarId = c.Id,
+                       ModelYear = c.ModelYear,
+                       DailyPrice = c.DailyPrice,
+                       CarName = c.Description,
+                       BrandName = b.BrandName,
+                       ColorName = co.ColorName,
+                       MinFindeks = c.MinFindeks,
+
+                     };
+        return result.ToList();
+      }
     }
+  }
 }

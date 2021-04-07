@@ -1,4 +1,4 @@
-﻿using Core.Utilities.Results;
+using Core.Utilities.Results;
 using Entities.Concrete;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -14,6 +14,7 @@ namespace Business.Abstract
         IResult Delete(CarImage carImage);
         IResult Update(IFormFile file, CarImage carImage);
         IDataResult<CarImage> GetById(int id);
+        IDataResult<CarImage> GetFirstImageOfCar(int carId);
         IDataResult<List<CarImage>> GetByCarId(int carId);
     }
 }
